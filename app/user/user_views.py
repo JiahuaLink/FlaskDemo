@@ -10,7 +10,6 @@ from flask_cors import cross_origin
 from models.error_msg import ErrorMessage
 from models.response import MyResponse
 from models.stutus_code import StatusCode
-from models.user.user_model import UserModel
 from service.user_service import UserService
 from utils.auth.login import login_required
 

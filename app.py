@@ -3,6 +3,7 @@ from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
 from app.user.user_views import user
 from exts import db
+from models.error_msg import ErrorMessage
 from models.response import MyResponse
 from models.stutus_code import StatusCode
 
@@ -50,8 +51,9 @@ def handle_401(e):
             hander = app.error_handler_spec.get(bp_name, {}).get(StatusCode.UNAUTHORIZED)
             if hander is not None:
                 return hander(e)
-    response = {"error_code": StatusCode.UNAUTHORIZED, "error_msg": "url not found"}
-    return response
+    response = MyResponse(error_code=StatusCode.UNAUTHORIZED, error_msg=ErrorMessage.UNAUTHORIZED)
+
+    return response.to_dict()
 
 
 @app.errorhandler(StatusCode.NOT_FOUND)
@@ -63,8 +65,9 @@ def handle_404(e):
             hander = app.error_handler_spec.get(bp_name, {}).get(StatusCode.NOT_FOUND)
             if hander is not None:
                 return hander(e)
-    response = {"error_code": StatusCode.NOT_FOUND, "error_msg": "url not found"}
-    return response
+    response = MyResponse(error_code=StatusCode.NOT_FOUND, error_msg=ErrorMessage.URL_NOT_FOUND)
+
+    return response.to_dict()
 
 
 @app.errorhandler(StatusCode.INTERNAL_SERVER_ERROR)
@@ -75,8 +78,8 @@ def handle_500(e):
             hander = app.error_handler_spec.get(bp_name, {}).get(StatusCode.INTERNAL_SERVER_ERROR)
             if hander is not None:
                 return hander(e)
-    response = {"error_code": StatusCode.INTERNAL_SERVER_ERROR, "error_msg": "INTERNAL ERROR"}
-    return response
+    response = MyResponse(error_code=StatusCode.INTERNAL_SERVER_ERROR, error_msg=ErrorMessage.SERVER_INTERNAL_ERROR)
+    return response.to_dict()
 
 
 @app.errorhandler(StatusCode.BAD_REQUEST)
@@ -87,8 +90,8 @@ def handle_400(e):
             hander = app.error_handler_spec.get(bp_name, {}).get(StatusCode.BAD_REQUEST)
             if hander is not None:
                 return hander(e)
-    response = {"error_code": StatusCode.BAD_REQUEST, "error_msg": "BAD REQUEST"}
-    return response
+    response = MyResponse(error_code=StatusCode.BAD_REQUEST, error_msg=ErrorMessage.BAD_REQUEST)
+    return response.to_dict()
 
 
 @app.errorhandler(StatusCode.FORBIDDEN)

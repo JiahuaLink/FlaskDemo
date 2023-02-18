@@ -8,8 +8,9 @@ from xmlrpc.client import SERVER_ERROR
 
 
 class ErrorMessage:
-    SERVER_INTERNAL_ERROR = '系统繁忙，请稍后再试'
-    USER_NOT_EXISTS = '用户不存在'
-    USER_NOT_LOGIN = 'User not logged in,Permission denied'
-
-
+    SERVER_INTERNAL_ERROR = 'SERVER INTERNAL ERROR'
+    USER_NOT_EXISTS = 'USER NOT EXISTS'
+    USER_NOT_LOGIN = 'USER NOT LOGIN,Permission Denied'
+    URL_NOT_FOUND = 'URL NOT FOUND'
+    UNAUTHORIZED = 'User is not authorized'
+    BAD_REQUEST = 'BAD REQUEST'
