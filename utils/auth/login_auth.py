@@ -16,6 +16,7 @@ from flask import current_app, request, make_response
 from models.error_msg import ErrorMessage
 from models.response import MyResponse
 from models.ret_code import RetCode
+from utils.log.log_manager import logger
 
 
 def generate_access_token(username, algorithm='HS256', exp=2):
@@ -77,16 +78,21 @@ def login_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         response = MyResponse(RetCode.SUCCESS, 'SUCCESS')
+        logger.info(f'login required,function is {f}')
         token = request.headers.get('Authorization', default=None)
+
         if not token:
             response.set_error_code(RetCode.FORBIDDEN)
             response.set_error_msg(ErrorMessage.USER_NOT_LOGIN)
-
+            logger.error(
+                f'Login Failed,Account:{ErrorMessage.USER_NOT_LOGIN},cause by:Authorization token is not pass')
             return make_response(response.to_dict())
         username = identity(token)
         if not username:
             response.set_error_code(RetCode.FORBIDDEN)
             response.set_error_msg(ErrorMessage.USER_NOT_LOGIN)
+            logger.error(
+                f'Login Failed,Account:{ErrorMessage.USER_NOT_LOGIN},cause by:username is not pass')
             return make_response(response.to_dict())
         return f(*args, **kwargs)
 

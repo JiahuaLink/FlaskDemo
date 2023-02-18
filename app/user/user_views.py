@@ -36,19 +36,24 @@ def login():
 
 @cross_origin(support_credentials=True)
 @user.route('/v1/users', methods=['GET'])
-# @login_required
+@login_required
 def get_user_info():
     response = MyResponse(error_code=RetCode.SUCCESS, error_msg=ErrorMessage.SUCCESS, data=[])
     account = request.args.get('account')
-    # username = request.args.get('username')
+    logger.info(f'Try to get user info,account is {account}')
     try:
         user_info = UserService(account=account).get_user_info()
         if user_info is None:
+            logger.error(f'user info,account is {account},{ErrorMessage.USER_NOT_EXISTS}')
             response.set_error_msg(f'{account} {ErrorMessage.USER_NOT_EXISTS}')
             response.set_error_code(RetCode.USER_NOT_EXISTS)
             return make_response(response.to_dict()), RetCode.BAD_REQUEST
+        logger.info(f'user info is {user_info}')
         response.set_data(user_info)
+        return make_response(response.to_dict()), RetCode.SUCCESS
     except Exception:
+
         logger.error(f'Exception,get_user_info {traceback.format_exc()}')
         response.set_error_msg(ErrorMessage.SERVER_INTERNAL_ERROR)
-    return make_response(response.to_dict()), RetCode.SUCCESS
+        response.set_error_code(RetCode.INTERNAL_SERVER_ERROR)
+        return make_response(response.to_dict()), RetCode.INTERNAL_SERVER_ERROR

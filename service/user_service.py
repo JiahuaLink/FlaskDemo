@@ -41,7 +41,7 @@ class UserService:
     def verify_login(self, account, password, verify_code):
         response = MyResponse(error_code=RetCode.SUCCESS_CODE, error_msg=ErrorMessage.SUCCESS, data=[])
         try:
-            verify_mode = current_app.config['VERIFYs_CODE']
+            verify_mode = current_app.config['VERIFY_CODE']
             user_info: UserModel = UserDao.query_userinfo(self.account)
             if not user_info:
                 logger.error(
@@ -56,7 +56,6 @@ class UserService:
                     if data_string:
                         verify_code_redis = json.loads(data_string)
                         if verify_code_redis == verify_code:
-
                             access_token = generate_access_token(user_info.get_account())
                             response.set_error_code(RetCode.SUCCESS_CODE)
                             response.set_error_msg(ErrorMessage.SUCCESS)
