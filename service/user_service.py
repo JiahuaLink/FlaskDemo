@@ -4,6 +4,7 @@
 # @Email : 840132699@qq.com
 # @File : user_service.py
 # @Software: PyCharm
+from dao.user.user_dao import UserDao
 from models.user.user_model import UserModel
 
 
@@ -13,7 +14,7 @@ class UserService:
         self.account = account
 
     def get_user_info(self):
-        user_info: UserModel = UserModel.query.filter(UserModel.account == self.account).first()
+        user_info: UserModel = UserDao.query_userinfo(self.account)
         if user_info is not None:
             account = user_info.get_account()
             username = user_info.get_username()
