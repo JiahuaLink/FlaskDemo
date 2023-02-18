@@ -28,9 +28,9 @@ def get_user_info():
     try:
         user_info = UserService(account=account).get_user_info()
         if user_info is None:
-            response.set_error_msg(f'{username}，{ErrorMessage.USER_NOT_EXISTS}')
+            response.set_error_msg(f'{account} {ErrorMessage.USER_NOT_EXISTS}')
             response.set_error_code(StatusCode.USER_NOT_EXISTS)
-            return make_response(response.to_dict()), StatusCode.FORBIDDEN
+            return make_response(response.to_dict()), StatusCode.BAD_REQUEST
         response.set_data(user_info)
     except:
         response.set_error_msg(ErrorMessage.SERVER_INTERNAL_ERROR)
