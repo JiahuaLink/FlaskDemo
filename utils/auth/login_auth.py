@@ -2,7 +2,7 @@
 # @Time : 2023/2/18 00:10
 # @Author : JiahuaLInk
 # @Email : 840132699@qq.com
-# @File : login.py
+# @File : login_auth.py
 # @Software: PyCharm
 import random
 from functools import wraps
@@ -15,12 +15,13 @@ from flask import current_app, request, make_response
 
 from models.error_msg import ErrorMessage
 from models.response import MyResponse
+from models.stutus_code import StatusCode
 
 
 def generate_access_token(username, algorithm='HS256', exp=2):
     jwt_key = current_app.config['JWT_KEY']
     exp = current_app.config['EXPIRE_TIME']
-    now = datetime.utcnow()
+    now = datetime.datetime.utcnow()
     exp_datetime = now + timedelta(hours=exp)
     access_payload = {
         'exp': exp_datetime,
@@ -75,16 +76,16 @@ def login_required(f):
 
     @wraps(f)
     def wrapper(*args, **kwargs):
-        response = MyResponse(200, 'SUCCESS')
+        response = MyResponse(StatusCode.SUCCESS, 'SUCCESS')
         token = request.headers.get('Authorization', default=None)
-
         if not token:
-            response.set_error_code(403)
+            response.set_error_code(StatusCode.FORBIDDEN)
             response.set_error_msg(ErrorMessage.USER_NOT_LOGIN)
+
             return make_response(response.to_dict())
         username = identity(token)
         if not username:
-            response.set_error_code(403)
+            response.set_error_code(StatusCode.FORBIDDEN)
             response.set_error_msg(ErrorMessage.USER_NOT_LOGIN)
             return make_response(response.to_dict())
         return f(*args, **kwargs)

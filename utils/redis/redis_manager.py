@@ -60,3 +60,23 @@ class RedisManager(object):
             print(f"read keys {key} error,{str(e)}")
             return
         return tmp
+
+    @classmethod
+    def delete(cls, *names):
+        r = cls._get_r()
+        r.delete(*names)
+
+    @classmethod
+    def expire(cls, key, expires=None):
+        """
+        设置过期时间
+        :param key:
+        :param expires: 单位秒
+        :return:
+        """
+        if expires:
+            exppire_in_secconds = expires
+        else:
+            exppire_in_secconds = current_app.config['REDIS_EXPIRE']
+        r = cls._get_r()
+        r.expire(key, expires)

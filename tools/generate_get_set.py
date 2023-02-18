@@ -4,7 +4,7 @@
 # @Email : 840132699@qq.com
 # @File : generate_get_set.py
 # @Software: PyCharm
-class UserModel:
+class Test:
     def __init__(self,**kwargs):
         self.username = None
         self.password = None
@@ -19,6 +19,6 @@ def generate_get_set(model:object):
         print("def get_" + k + "(self):")
         print("\treturn self." + k)
 if __name__ == '__main__':
-    model = UserModel()
+    model = Test()
     generate_get_set(model)
 

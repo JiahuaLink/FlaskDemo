@@ -8,9 +8,11 @@ from xmlrpc.client import SERVER_ERROR
 
 
 class ErrorMessage:
+    SUCCESS = 'SUCCESS'
     SERVER_INTERNAL_ERROR = 'SERVER INTERNAL ERROR'
     USER_NOT_EXISTS = 'USER NOT EXISTS'
-    USER_NOT_LOGIN = 'USER NOT LOGIN,Permission Denied'
+    USER_NOT_LOGIN = 'User Not Login,Permission Denied'
     URL_NOT_FOUND = 'URL NOT FOUND'
     UNAUTHORIZED = 'User is not authorized'
     BAD_REQUEST = 'BAD REQUEST'
+    PARAM_INCORRECT = 'The username or password is incorrect'

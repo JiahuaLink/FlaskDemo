@@ -20,14 +20,14 @@ def hello_world():  # put application's code here
 
 
 @app.after_request
-def after_request(resp):
-    res = make_response(resp)
+def after_request(res):
     res.headers['Access-Control-Allow-Origin'] = '*'
     res.headers['Access-Control'] = 'no-cache'
     res.headers['Access-Control-Allow-Methods'] = 'GET,POST,PUT'
     res.headers[
         'Access-Control-Allow-Headers'] = 'Content-Type,Authorization,X-Requested-With,Origin,Content-Length.User-Agent'
     res.headers['Content-Type'] = 'application/json;charset=utf-8'
+    res.headers['Authorization'] = 'accessToken'
     return res
 
 
@@ -88,7 +88,7 @@ def handle_400(e):
     for bp_name, bp in app.blueprints.items():
         if path.startswith(bp.url_prefix):
             hander = app.error_handler_spec.get(bp_name, {}).get(StatusCode.BAD_REQUEST)
-            if hander is not None:
+            if hander:
                 return hander(e)
     response = MyResponse(error_code=StatusCode.BAD_REQUEST, error_msg=ErrorMessage.BAD_REQUEST)
     return response.to_dict()

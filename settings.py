@@ -1,4 +1,5 @@
 DEBUG = True
+VERIFY_CODE = 0 # 验证模式需要1 验证码 0 不需要验证码
 SQL = 'mysql'
 DRIVER = 'pymysql'
 HOST = '127.0.0.1'
@@ -11,7 +12,8 @@ SQLALCHEMY_DATABASE_URI = f'{SQL}+{DRIVER}://{USERNAME}:{PASSWORD}@{HOST}:{PORT}
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 JWT_KEY = 'qwertyuasdfghj'
 EXPIRE_TIME = 168  # 小时
-REDIS_HOST = ''
-REDIS_PORT = ''
-REDIS_DB = ''
-REDIS_PWD = ''
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = '6379'
+REDIS_DB = '0'
+REDIS_PWD = '74108520963.ljhljh'
+

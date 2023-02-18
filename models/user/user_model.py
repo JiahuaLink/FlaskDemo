@@ -29,5 +29,5 @@ class UserModel(db.Model):
     def set_account(self, account):
         self.account = account
 
-    def get_account(self):
+    def get_account(self) -> str:
         return self.account
