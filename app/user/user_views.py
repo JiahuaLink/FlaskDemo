@@ -4,6 +4,8 @@
 # @Email : 840132699@qq.com
 # @File : user_views.py
 # @Software: PyCharm
+import traceback
+
 from flask import Blueprint, make_response, request, current_app
 from flask_cors import cross_origin
 
@@ -22,10 +24,13 @@ user = Blueprint('user', __name__, url_prefix='/api')
 @cross_origin(support_credentials=True)
 @user.route('/v1/login', methods=['POST'])
 def login():
-    account: str = request.json.get('account')
-    password: str = request.json.get('password')
-    verify_code = request.json.get('verifycode')
-    logger.info(f' Try to login,account is {account},verify_code is {verify_code}')
+    try:
+        account: str = request.json.get('account')
+        password: str = request.json.get('password')
+        verify_code = request.json.get('verifycode')
+        logger.info(f' Try to login,account is {account},verify_code is {verify_code}')
+    except Exception:
+        logger.error(f'Exception,{traceback.format_exc()}')
     return UserService(account=account).verify_login(account, password, verify_code)
 
 
@@ -43,6 +48,7 @@ def get_user_info():
             response.set_error_code(RetCode.USER_NOT_EXISTS)
             return make_response(response.to_dict()), RetCode.BAD_REQUEST
         response.set_data(user_info)
-    except:
+    except Exception:
+        logger.error(f'Exception,get_user_info {traceback.format_exc()}')
         response.set_error_msg(ErrorMessage.SERVER_INTERNAL_ERROR)
     return make_response(response.to_dict()), RetCode.SUCCESS

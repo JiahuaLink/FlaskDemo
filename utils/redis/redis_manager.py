@@ -5,9 +5,12 @@
 # @File : redis_manager.py
 # @Software: PyCharm
 import json
+import traceback
 
 import redis
 from flask import current_app
+
+from utils.log.log_manager import logger
 
 
 class RedisManager(object):
@@ -38,7 +41,7 @@ class RedisManager(object):
         try:
             value: bytes = r.get(key)
         except Exception as e:
-            print(f"read key {key} error,{str(e)}")
+            logger.error(f'Exception,read key {key} error,{traceback.format_exc()}')
             return
         return value.decode('utf-8') if value else value
 
@@ -57,7 +60,7 @@ class RedisManager(object):
                         tmp.append(data)
 
         except Exception as e:
-            print(f"read keys {key} error,{str(e)}")
+            logger.error(f'Exception,{traceback.format_exc()}')
             return
         return tmp
 

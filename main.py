@@ -49,7 +49,7 @@ def handle_401(e):
 
         if path.startswith(bp.url_prefix):
             hander = app.error_handler_spec.get(bp_name, {}).get(RetCode.UNAUTHORIZED)
-            if hander is not None:
+            if hander:
                 return hander(e)
     response = MyResponse(error_code=RetCode.UNAUTHORIZED, error_msg=ErrorMessage.UNAUTHORIZED)
 
@@ -63,7 +63,7 @@ def handle_404(e):
 
         if path.startswith(bp.url_prefix):
             hander = app.error_handler_spec.get(bp_name, {}).get(RetCode.NOT_FOUND)
-            if hander is not None:
+            if hander:
                 return hander(e)
     response = MyResponse(error_code=RetCode.NOT_FOUND, error_msg=ErrorMessage.URL_NOT_FOUND)
 
@@ -76,7 +76,7 @@ def handle_500(e):
     for bp_name, bp in app.blueprints.items():
         if path.startswith(bp.url_prefix):
             hander = app.error_handler_spec.get(bp_name, {}).get(RetCode.INTERNAL_SERVER_ERROR)
-            if hander is not None:
+            if hander:
                 return hander(e)
     response = MyResponse(error_code=RetCode.INTERNAL_SERVER_ERROR, error_msg=ErrorMessage.SERVER_INTERNAL_ERROR)
     return response.to_dict()
