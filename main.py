@@ -5,7 +5,7 @@ from app.user.user_views import user
 from exts import db
 from models.error_msg import ErrorMessage
 from models.response import MyResponse
-from models.stutus_code import StatusCode
+from models.ret_code import RetCode
 
 app = Flask(__name__)
 CORS(app, resource=r'/*')
@@ -36,73 +36,73 @@ def before_request():
     ip = request.remote_addr
     url = request.url
     method = request.method
-    if request.method == 'OPTIONS':
-        print(ip, url, method)
-    if request.method == 'POST' or request.method == 'GET':
-        print(ip, url, method)
+    # if request.method == 'OPTIONS':
+    #     print(ip, url, method)
+    # if request.method == 'POST' or request.method == 'GET':
+    #     print(ip, url, method)
 
 
-@app.errorhandler(StatusCode.UNAUTHORIZED)
+@app.errorhandler(RetCode.UNAUTHORIZED)
 def handle_401(e):
     path = request.path
     for bp_name, bp in app.blueprints.items():
 
         if path.startswith(bp.url_prefix):
-            hander = app.error_handler_spec.get(bp_name, {}).get(StatusCode.UNAUTHORIZED)
+            hander = app.error_handler_spec.get(bp_name, {}).get(RetCode.UNAUTHORIZED)
             if hander is not None:
                 return hander(e)
-    response = MyResponse(error_code=StatusCode.UNAUTHORIZED, error_msg=ErrorMessage.UNAUTHORIZED)
+    response = MyResponse(error_code=RetCode.UNAUTHORIZED, error_msg=ErrorMessage.UNAUTHORIZED)
 
     return response.to_dict()
 
 
-@app.errorhandler(StatusCode.NOT_FOUND)
+@app.errorhandler(RetCode.NOT_FOUND)
 def handle_404(e):
     path = request.path
     for bp_name, bp in app.blueprints.items():
 
         if path.startswith(bp.url_prefix):
-            hander = app.error_handler_spec.get(bp_name, {}).get(StatusCode.NOT_FOUND)
+            hander = app.error_handler_spec.get(bp_name, {}).get(RetCode.NOT_FOUND)
             if hander is not None:
                 return hander(e)
-    response = MyResponse(error_code=StatusCode.NOT_FOUND, error_msg=ErrorMessage.URL_NOT_FOUND)
+    response = MyResponse(error_code=RetCode.NOT_FOUND, error_msg=ErrorMessage.URL_NOT_FOUND)
 
     return response.to_dict()
 
 
-@app.errorhandler(StatusCode.INTERNAL_SERVER_ERROR)
+@app.errorhandler(RetCode.INTERNAL_SERVER_ERROR)
 def handle_500(e):
     path = request.path
     for bp_name, bp in app.blueprints.items():
         if path.startswith(bp.url_prefix):
-            hander = app.error_handler_spec.get(bp_name, {}).get(StatusCode.INTERNAL_SERVER_ERROR)
+            hander = app.error_handler_spec.get(bp_name, {}).get(RetCode.INTERNAL_SERVER_ERROR)
             if hander is not None:
                 return hander(e)
-    response = MyResponse(error_code=StatusCode.INTERNAL_SERVER_ERROR, error_msg=ErrorMessage.SERVER_INTERNAL_ERROR)
+    response = MyResponse(error_code=RetCode.INTERNAL_SERVER_ERROR, error_msg=ErrorMessage.SERVER_INTERNAL_ERROR)
     return response.to_dict()
 
 
-@app.errorhandler(StatusCode.BAD_REQUEST)
+@app.errorhandler(RetCode.BAD_REQUEST)
 def handle_400(e):
     path = request.path
     for bp_name, bp in app.blueprints.items():
         if path.startswith(bp.url_prefix):
-            hander = app.error_handler_spec.get(bp_name, {}).get(StatusCode.BAD_REQUEST)
+            hander = app.error_handler_spec.get(bp_name, {}).get(RetCode.BAD_REQUEST)
             if hander:
                 return hander(e)
-    response = MyResponse(error_code=StatusCode.BAD_REQUEST, error_msg=ErrorMessage.BAD_REQUEST)
+    response = MyResponse(error_code=RetCode.BAD_REQUEST, error_msg=ErrorMessage.BAD_REQUEST)
     return response.to_dict()
 
 
-@app.errorhandler(StatusCode.FORBIDDEN)
+@app.errorhandler(RetCode.FORBIDDEN)
 def handle_403(e):
     path = request.path
     for bp_name, bp in app.blueprints.items():
         if path.startswith(bp.url_prefix):
-            hander = app.error_handler_spec.get(bp_name, {}).get(StatusCode.FORBIDDEN)
+            hander = app.error_handler_spec.get(bp_name, {}).get(RetCode.FORBIDDEN)
             if hander is not None:
                 return hander(e)
-    response = {"error_code": StatusCode.FORBIDDEN, "error_msg": "Forbidden,You are not allowed to access this"}
+    response = {"error_code": RetCode.FORBIDDEN, "error_msg": "Forbidden,You are not allowed to access this"}
     return response
 
 

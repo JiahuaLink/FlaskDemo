@@ -15,7 +15,7 @@ from flask import current_app, request, make_response
 
 from models.error_msg import ErrorMessage
 from models.response import MyResponse
-from models.stutus_code import StatusCode
+from models.ret_code import RetCode
 
 
 def generate_access_token(username, algorithm='HS256', exp=2):
@@ -76,16 +76,16 @@ def login_required(f):
 
     @wraps(f)
     def wrapper(*args, **kwargs):
-        response = MyResponse(StatusCode.SUCCESS, 'SUCCESS')
+        response = MyResponse(RetCode.SUCCESS, 'SUCCESS')
         token = request.headers.get('Authorization', default=None)
         if not token:
-            response.set_error_code(StatusCode.FORBIDDEN)
+            response.set_error_code(RetCode.FORBIDDEN)
             response.set_error_msg(ErrorMessage.USER_NOT_LOGIN)
 
             return make_response(response.to_dict())
         username = identity(token)
         if not username:
-            response.set_error_code(StatusCode.FORBIDDEN)
+            response.set_error_code(RetCode.FORBIDDEN)
             response.set_error_msg(ErrorMessage.USER_NOT_LOGIN)
             return make_response(response.to_dict())
         return f(*args, **kwargs)

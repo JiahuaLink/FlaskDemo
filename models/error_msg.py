@@ -16,3 +16,4 @@ class ErrorMessage:
     UNAUTHORIZED = 'User is not authorized'
     BAD_REQUEST = 'BAD REQUEST'
     PARAM_INCORRECT = 'The username or password is incorrect'
+    VERIFY_INCORRECT = 'The verify code is not passed'
