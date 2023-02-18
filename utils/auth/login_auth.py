@@ -46,6 +46,13 @@ def decode_auth_token(token):
     try:
         payload = jwt.decode(token, key=jwt_key, algorithms='HS256')
     except(jwt.ExpiredSignatureError, jwt.InvalidSignatureError):
+        logger.error(
+            f'decode_auth_token Failed,cause by:jwt.ExpiredSignatureError, jwt.InvalidSignatureError')
+
+        return ""
+    except jwt.exceptions.DecodeError:
+        logger.error(
+            f'decode_auth_token Failed,cause by:jwt.exceptions.DecodeError')
         return ""
     else:
         return payload
